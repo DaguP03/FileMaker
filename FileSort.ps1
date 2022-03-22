@@ -1,10 +1,18 @@
-#------------------------------------------------------------------------
+﻿#------------------------------------------------------------------------
 
-#【設定】Excelファイルのパス
-$bookPath = "F:\UserFolder\Documents\Program\MySource\powershell\FileMaker.xlsx"
+# #コピー先フルパス
+# $CurrentPath = Read-Host "コピー先のディレクトリのフルパスを入力してください。"
 
-#【設定】対象のシート名
-$sheetName = "Sheet1"
+
+# #コピー元フルパス
+# $SearchPath = Read-Host "コピー元のディレクトリのフルパスを入力してください。"
+
+#コピー先フルパス
+$CurrentPath = Read-Host "コピー先のディレクトリのフルパスを入力してください。"
+
+
+#コピー元フルパス
+$SearchPath = Read-Host "コピー元のディレクトリのフルパスを入力してください。"
 
 #------------------------------------------------------------------------
 
@@ -13,25 +21,14 @@ $sheetName = "Sheet1"
 
 #------------
 
-# 処理対象のフォルダ
-$targetFolder = 'C:\temp\test';
- 
 # $targetFolder内のファイル・フォルダのリストを取得する。
-$itemList = Get-ChildItem $targetFolder;
+$itemList = Get-ChildItem $CurrentPath;
 foreach($item in $itemList)
 {
-    # PSIsContainer でファイルかフォルダかを判定
-    if($item.PSIsContainer)
-    {
-        # フォルダの場合の処理
-        Write-Host ($item.Name + 'はフォルダです。'); 
-    }
-    else
-    {
-        # ファイルの場合の処理
-        Write-Host ($item.Name + 'はファイルです。'); 
-    }
+    $itemName = Get-ChildItem -Path $item -Name
+    Write-Output $itemName
 } 
+
 # for( $i = 0; $i -lt 3; $i++){
 
 #     $FolderName = $sheet.Cells($BaseColumn+$i,$BaseRow).Text
@@ -57,12 +54,3 @@ foreach($item in $itemList)
 #------------
 
 
-#検証終了時は以下を実行
-#------------------------------------------------------------------------
-#Excel終了
-$excel.Quit()
-
-#プロセス解放
-$excel = $Null
-[GC]::collect()
-#------------------------------------------------------------------------

@@ -39,9 +39,11 @@ foreach($Ser_item in $Ser_itemList)
 {
     $Ser_itemName =  $Ser_item.Name
 
+    #コピー先のフォルダとの比較。
     foreach($Cur_item in $Cur_itemList)
     {
         $Ser_itemName =  $Ser_item.Name
+        #コピー先にフォルダ名前があるなら
         if($Cur_item -eq $Ser_itemName)
         {
             SecondSearch($Ser_item.FullName,$Cur_item.FullName)

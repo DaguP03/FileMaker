@@ -8,26 +8,55 @@
 # $SearchPath = Read-Host "コピー元のディレクトリのフルパスを入力してください。"
 
 #コピー先フルパス
-$CurrentPath = Read-Host "コピー先のディレクトリのフルパスを入力してください。"
+$CurrentPath = "F:\UserFolder\Music\ミュージック\Test用\コピー先フォルダ"
 
 
 #コピー元フルパス
-$SearchPath = Read-Host "コピー元のディレクトリのフルパスを入力してください。"
+$SearchPath = "F:\UserFolder\Music\ミュージック\Test用\コピー元フォルダ"
 
 #------------------------------------------------------------------------
 
 
-#フォルダ名変数
+#変数-----------------------------------------------------------------------
+$Flag=0
+#---------------------------------------------------------------------------
 
-#------------
+#関数-----------------------------------------------------------------------
+function SecondSearch($Second_SearchPath,$Second_CurrentPath){
+            
+}
 
-# $targetFolder内のファイル・フォルダのリストを取得する。
-$itemList = Get-ChildItem $CurrentPath;
-foreach($item in $itemList)
+function CopyFolder($Second_SearchPath,$Second_CurrentPath){
+    
+}
+#---------------------------------------------------------------------------
+# $SearchPass内のファイル・フォルダのリストを取得する。
+$Ser_itemList = Get-ChildItem $SearchPath;
+$Cur_itemList = Get-ChildItem $CurrentPath;
+
+#最初のフォルダのサーチ
+foreach($Ser_item in $Ser_itemList)
 {
-    $itemName = Get-ChildItem -Path $item -Name
-    Write-Output $itemName
+    $Ser_itemName =  $Ser_item.Name
+
+    foreach($Cur_item in $Cur_itemList)
+    {
+        $Ser_itemName =  $Ser_item.Name
+        if($Cur_item -eq $Ser_itemName)
+        {
+            SecondSearch($Ser_item.FullName,$Cur_item.FullName)
+            $Flag =1
+        }
+    }
+    
+    if ($Flag -eq 0)
+    {
+        CopyFolder($Ser_item.FullName,$Cur_item.FullName)
+    }
 } 
+
+
+
 
 # for( $i = 0; $i -lt 3; $i++){
 

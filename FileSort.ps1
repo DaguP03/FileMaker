@@ -19,16 +19,37 @@ $SearchPath = "F:\UserFolder\Music\ミュージック\Test用\コピー元フォ
 
 #変数-----------------------------------------------------------------------
 $Flag=0
+$Flag2=0
 #---------------------------------------------------------------------------
 
 #関数-----------------------------------------------------------------------
-function SecondSearch($Second_SearchPath,$Second_CurrentPath){
-            
+function SecondSearch([String]$Second_SearchPath,[String]$Second_CurrentPath){
+    $Ser_itemList2 = Get-ChildItem $Second_SearchPath;
+    $Cur_itemList2 = Get-ChildItem $Second_CurrentPath;
+
+    foreach($Ser_item2 in $Ser_itemList2)
+    {
+        $Ser_itemName2 =  $Ser_item2.Name
+    
+        #コピー先のフォルダとの比較。
+        foreach($Cur_item2 in $Cur_itemList2)
+        {
+            $Cur_itemName2 =  $Cur_item2.Name
+            #コピー先にフォルダ名前があるなら
+            if($Cur_itemName2 -eq $Ser_itemName2)
+            {
+                $Flag2 =1
+                break
+            }
+        }
+
+        if ($Flag2 -eq 0)
+        {
+            Copy-Item -Path $Ser_item2.FullName-Recurse $Second_CurrentPath
+        }
+    }
 }
 
-function CopyFolder($Second_SearchPath,$Second_CurrentPath){
-    
-}
 #---------------------------------------------------------------------------
 # $SearchPass内のファイル・フォルダのリストを取得する。
 $Ser_itemList = Get-ChildItem $SearchPath;
@@ -42,46 +63,21 @@ foreach($Ser_item in $Ser_itemList)
     #コピー先のフォルダとの比較。
     foreach($Cur_item in $Cur_itemList)
     {
-        $Ser_itemName =  $Ser_item.Name
+        $Cur_itemName =  $Cur_item.Name
         #コピー先にフォルダ名前があるなら
-        if($Cur_item -eq $Ser_itemName)
+        if($Cur_itemName -eq $Ser_itemName)
         {
-            SecondSearch($Ser_item.FullName,$Cur_item.FullName)
+            #一つ下のフォルダのサーチ
+            SecondSearch $Ser_item.FullName $Cur_item.FullName
             $Flag =1
         }
     }
     
     if ($Flag -eq 0)
     {
-        CopyFolder($Ser_item.FullName,$Cur_item.FullName)
+        Copy-Item -Path $Ser_item.FullName -Recurse $CurrentPath
     }
 } 
 
-
-
-
-# for( $i = 0; $i -lt 3; $i++){
-
-#     $FolderName = $sheet.Cells($BaseColumn+$i,$BaseRow).Text
-#     $FolderStartNum =$sheet.Cells($BaseColumn+$i,$BaseRow+1).Text 
-#     $FolderNumber =$sheet.Cells($BaseColumn+$i,$BaseRow+2).Text
-#     $FolderMake = "RQ-SW-"+$FolderName
-
-#     #値が入力されていないのなら、ループを辞める
-#     if ("" -eq $FolderName -or "" -eq $FolderStartNum -or "" -eq $FolderNumber) {
-#         break;
-#     }
-
-#     $FolderStartNum = [int] $FolderStartNum
-#     $FolderNumber = [int] $FolderNumber
-    
-#     New-Item -Path . -ItemType Directory -Name $FolderMake
-    
-#     for($j = $FolderStartNum; $j -lt $FolderNumber+1; $j++){
-#         #フォルダを中に『作りたい個数』分生成
-#         New-Item -Path ./$FolderMake -ItemType Directory -Name $j
-#     }
-# }
-#------------
 
 
